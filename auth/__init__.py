@@ -118,6 +118,20 @@ class MD5PasswordEncryptor(PasswordEncryptor):
         seasoned = "%s%s" % (password, self.salt)
         return hashlib.md5(seasoned.encode('utf-8')).hexdigest()
 
+class SHA1PasswordEncryptor(PasswordEncryptor):
+    """SHA1 password encryptor
+    """
+    def encrypt(self, password):
+        seasoned = "%s%s" % (password, self.salt)
+        return hashlib.sha1(seasoned.encode('utf-8')).hexdigest()
+
+class SHA256PasswordEncryptor(PasswordEncryptor):
+    """SHA256 password encryptor
+    """
+    def encrypt(self, password):
+        seasoned = "%s%s" % (password, self.salt)
+        return hashlib.sha256(seasoned.encode('utf-8')).hexdigest()
+
 class UserService(object):
     """User service base class
     """
