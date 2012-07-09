@@ -76,31 +76,36 @@ def load_views(blueprint):
                         break;
                     i += 1
             
+             
             # Organize them into a list with the offset in the middle
             # to give the website a never ending 'loop' feel
             organized = []    
             
-            # most items to each side possible without overlap
-            rl = min(30, (total - 1) / 2)
-            
-            for n in range(i, i+rl):
-                if n >= total:
-                    ni = n - total
-                else:
-                    ni = n
+            if total < 3:
+                for n in range(0, total):
+                    organized.insert(0, threads[n])
+            else:            
+                # most items to each side possible without overlap
+                rl = min(30, (total - 1) / 2)
                 
-                if threads[ni] not in organized:
-                    organized.append(threads[ni])
-            
-            
-            for n in range(i-1, i-1-rl, -1):
-                if n < 0:
-                    ni = total + n
-                else:
-                    ni = n
+                for n in range(i, i+rl):
+                    if n >= total:
+                        ni = n - total
+                    else:
+                        ni = n
+                    
+                    if threads[ni] not in organized:
+                        organized.append(threads[ni])
                 
-                if threads[ni] not in organized:
-                    organized.insert(0, threads[ni])
+                 
+                for n in range(i-1, i-1-rl, -1):
+                    if n < 0:
+                        ni = total + n
+                    else:
+                        ni = n
+                    
+                    if threads[ni] not in organized:
+                        organized.insert(0, threads[ni])
             
             #current_app.logger.debug(organized)     
             return jsonify(organized)
