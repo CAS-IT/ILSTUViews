@@ -77,7 +77,7 @@ This way there shouldn't be any errors when trying to authenticate against Faceb
 Additionally, if you need Twilio account information you'll need to setup your own or ask for the account information from someone at Local Projects or University of Florida.
 
 ### Webassets
-
+Make sure to install node-less (lessc)
 This project takes advantage of the Python webassets library. However, compiling and processing CSS and JS files must still be done manually before deploying to an environment that does not run in debug mode. Whenever it comes time to deploy or commit changes to JS and/or CSS files, be sure to run them through the assets manager:
 
     $ python manage.py assets rebuild
