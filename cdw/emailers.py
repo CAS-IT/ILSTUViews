@@ -14,11 +14,9 @@ from flask import current_app
 
 class AmazonSender(object):
 
-    client = None
-
-    def __init__(self, aws_key, aws_secret):
-        self.aws_key = aws_key
-        self.aws_secret = aws_secret
+    def __init__(self, smtp_server, smtp_sender):
+        self.smtp_server = smtp_server
+        self.smtp_sender = smtp_sender
 
     def send_email(self, sender,
                          to_addresses,
@@ -33,8 +31,6 @@ class AmazonSender(object):
         
         if not sender_ascii:
             sender_ascii = sender
-
-        client = self.get_client()
 
         message = MIMEMultipart('alternative')
         message.set_charset('UTF-8')
@@ -51,19 +47,16 @@ class AmazonSender(object):
         if html:
             message.attach(MIMEText(_encode_str(html), 'html'))
         
-        
-        return client.send_raw_email(message.as_string(), sender_ascii,
-                                     destinations=to_addresses)
+        result = True
+        server = smtplib.SMTP("smtp.ilstu.edu", 25)
+        server.ehlo()
+        try:
+            server.sendmail(message['From'], message['To'], ("Subject: %s\r\n\r\n%s" % (message['Subject'], text)))
+        except:
 
-    def vertify_email(self, email):
-        client = self.get_client()
-        return client.verify_email_address(email)
-
-    def get_client(self):
-        if not self.client:
-            self.client = SESConnection(self.aws_key,
-                                        self.aws_secret)
-        return self.client
+            result = False
+        server.quit()
+        return result
 
 
 #--- Helpers ----------------------------------------------
@@ -94,21 +87,23 @@ Comment:
     current_app.emailer.send_email(
         contact_email,
         [contact_email],
-        'The Wall Contact Form: %s' % kwargs['feedback'],
+        'ILSTU Views Contact Form: %s' % kwargs['feedback'],
         msg % kwargs)
     
-def send_forgot_password(recipient, password):
+def send_forgot_password(recipient, reset_token):
     msg = """
-Your password for civildebatewall.com is:
+To reset your password at ilstuviews.illinoisstate.edu, please go to the following link:
 
-%s
+http://ilstuviews.illinoisstate.edu/forgot/%s
+
+If you did not request your password to be reset, please ignore this email.
 """
     contact_email = current_app.config['CDW']['contact_email']
     current_app.emailer.send_email(
         contact_email,
         [recipient],
-        'Your password for civildebatewall.com',
-        msg % password)
+        'Your password reset for ilstuviews.illinoisstate.edu',
+        msg % reset_token)
     
 def send_reply_notification(recipient, context):
     msg = """
@@ -147,5 +142,5 @@ def forgot_password():
     pass
 
 def init(app):
-    app.emailer = AmazonSender(app.config['CDW']['aws']['access_key_id'],
-                               app.config['CDW']['aws']['secret_access_key'])
+    app.emailer = AmazonSender(app.config['LOG_EMAIL_SERVER'],
+                               app.config['LOG_EMAIL_SENDER'])
