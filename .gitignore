@@ -1,3 +1,5 @@
+cdw/static/media/images/web/*
+cdw/static/media/images/thumbnails/*
 main.log*
 .DS_Store
 .pydevproject
