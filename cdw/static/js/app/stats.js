@@ -361,8 +361,10 @@ window.StatsFrequentWordsView = Backbone.View.extend({
   
   addWordBtn: function(item, index) {
     // Get a color based on the ratio
+    //var colors = ['#68b7fd', '#5191d5', '#457ec1', '#3767a9', '#3a546c',
+    //              '#3f3c4d', '#6c4434', '#8a4d29', '#c8611d', '#e0681c']
     var colors = ['#68b7fd', '#5191d5', '#457ec1', '#3767a9', '#3a546c',
-                  '#3f3c4d', '#6c4434', '#8a4d29', '#c8611d', '#e0681c']
+                  '#4e495a', '#723640', '#872327', '#b61313', '#bf0e0c',]
     var cIndex = 9 - Math.round(item.get('ratio') * 9);
     
     // Create button
