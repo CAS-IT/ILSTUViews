@@ -3,8 +3,10 @@
     :license: Affero GNU GPL v3, see LEGAL/LICENSE for more details.
 """
 import datetime
+import hashlib
 from flaskext.login import UserMixin
 from mongoengine import *
+from random import randint
 
 class Settings(Document):
     badwords = StringField()
@@ -53,7 +55,12 @@ class User(Document, EntityMixin, UserMixin):
     webProfilePictureThumbnail = StringField(default='avatar-thumbnail.jpg')
     active = BooleanField(default=True)
     lastPostDate = DateTimeField()
-    
+    reset_token = StringField(default=None)
+
+    def create_reset_token(self):
+        self.reset_token = hashlib.sha256("%i++%s++%s++%s" % (randint(0,2876435), self.username, self.email, self.password)).hexdigest()
+        self.save()
+
     def get_profile_image(self, img_type):
         img_type = img_type or 'web'
         

@@ -9,7 +9,8 @@ import bitlyapi
 from cdw import utils
 from auth import auth_provider
 from cdw.forms import (UserRegistrationForm, SuggestQuestionForm, 
-                       VerifyPhoneForm, EditProfileForm)
+                       VerifyPhoneForm, EditProfileForm, 
+                       ResetPasswordForm)
 from cdw.models import PhoneVerificationAttempt, ShareRecord, Thread
 from cdw.services import cdw, connection_service
 from cdwapi import cdwapi 
@@ -524,7 +525,7 @@ def init(app):
             return redirect(fb_url)
             
         if provider_id == 'twitter':
-            msg = "I just debated on The Wall. %s" % short_url
+            msg = "I just debated on ILSTU Views. %s" % short_url
             msg = urllib.quote_plus(msg)
             return redirect('http://twitter.com/home?status=%s' % msg)
             
@@ -543,17 +544,42 @@ def init(app):
             except Exception, e:
                 return jsonify({"success": False})
             
+            user.create_reset_token()
             from cdw import emailers
-            emailers.send_forgot_password(user.email, user.password)
+            emailers.send_forgot_password(user.email, user.reset_token)
             return jsonify({"success": True})
+    
+    @app.route("/forgot/<reset_token>")
+    def forgot_token(reset_token):
+        error = ""
+        form = ResetPasswordForm()
+        user = ""
+        try:
+            user = cdw.users.with_reset_token(reset_token)
+            valid_token = True
+        except Exception, e:
+            valid_token = False
         
+        return render_template("/forgot_token.html", error=error, form=form, stepone=True, reset_token=reset_token, valid_token=valid_token, user=user)
+
+    @app.route("/forgot_reset", methods=['POST'])
+    def forgot_token_reset():
+        error = ""
+        reset_token = request.form.get('reset_token', None)
+        form = ResetPasswordForm()
+        try:
+            user = cdw.users.with_reset_token(reset_token)
+            cdw.reset_user_password(user.get_id(), form.new_password.data)
+        except Exception, e:
+            error = e
+
+        return render_template("/forgot_token.html", error=error, stepone=False)
+
     @app.route("/whatisthis")
     def whatisthis():
         return render_template("/whatisthis.html",
                                section_selector="whatisthis", 
                                page_selector="index",)
-        
-        
         
     @app.route("/notifications/unsubscribe/<user_id>/all")
     def unsubscribe_all(user_id):

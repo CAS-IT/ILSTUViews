@@ -205,6 +205,12 @@ class UserRegistrationForm(Form):
         Required(message="You must accept the terms of service")])
     """
     
+class ResetPasswordForm(Form):
+    new_password = PasswordField("New Password", validators=[
+                                                    Required(message='Password required'), 
+                                                    EqualTo('confirm', message='Passwords must match')])
+    confirm_password = PasswordField("Confirm passowrd")
+
 class SuggestQuestionForm(Form):
     question = TextField(validators=[Required(), Length(min=10, max=200, 
                 message='Question must be between 10 and 200 characters')])

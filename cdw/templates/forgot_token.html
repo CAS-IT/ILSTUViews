@@ -1,0 +1,43 @@
+{#
+ # Copyright (c) 2011 Local Projects. All rights reserved.
+ # license: Affero GNU GPL v3, see LEGAL/LICENSE for more details.
+ #}
+
+{% extends "/layouts/public.html" %}
+
+{% block page_title %} : {% endblock %}
+
+{% block content %}
+<div class="shim-tall white-on-black">
+  <div class="container">
+    <div class="prepend-2 span-43 append-2">
+      <h3 class="sub-title">Password Reset</h3>
+      <hr class="top"/>
+      <div class="sub-content">
+        <div class="span-43">
+          {% if error == "" %}
+            {% if stepone %}
+              {% if valid_token %}
+                <form method="post" action="/forgot_reset">
+                  {{ form.csrf }}
+                  <input type="hidden" name="reset_token" value="{{ reset_token  }}">
+                  <label>{{ form.new_password.label }}</label> {{ form.new_password }}<br />
+                  <label>{{ form.confirm_password.label }}</label> {{ form.confirm_password }}<br />
+                  <input type="submit" value="Reset Password" />
+                </form>
+              {% else %}
+                <p>Invalid password reset token.</p>
+              {% endif %}
+            {% else %}
+              <p>Your password has been reset successfully. Now forwarding you to the home page...</p>
+              <script type="text/javascript">setTimeout("location.href = '/';", 4000);</script>
+            {% endif %}
+          {% else %}
+          <p>{{ error }}</p>
+          {% endif %}
+        </div>
+        <hr class="bottom"/>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -188,6 +188,13 @@ class CDWService(object):
         self.users.save(user)
         return user
     
+    def reset_user_password(self, user_id, password):
+        user = self.users.with_id(user_id)
+        user.password = current_app.password_encryptor.encrypt(password)
+        user.reset_token = ""
+        self.users.save(user)
+        return user
+
     def get_all_posts_for_question(self, question):
         return Post.objects(thread__in=
                             self.threads.with_fields(question=question))
