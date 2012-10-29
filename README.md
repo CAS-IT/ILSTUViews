@@ -65,7 +65,7 @@ will startup the local development server.
 
 ### Facebook
 
-If you need to work on the Facebook login/registration component, you'll need to create a dummy application under a Facebook account you have access to. Add the app ID and app secret values to your rcfile or configuration file. It's also quite useful to setup a host rule on your system for the domain associated with your dummy app. For instance, my dummy app's domain is dev.www.civildebatewall.com and I have a hosts file entry that looks like so:
+If you need to work on the Facebook login/registration component, you'll need to create a dummy application under a Facebook account you have access to. Add the app ID and app secret values to your rcfile or configuration file. It's also quite useful to setup a host rule on your system for the domain associated with your dummy app. For instance, my dummy app's domain is dev.ilstuviews.illinoisstate.edu and I have a hosts file entry that looks like so:
 
     $ 127.0.0.1    dev.ilstuviews.illinoisstate.edu
 
