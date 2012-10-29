@@ -1,6 +1,6 @@
-# Civil Debate Wall Website
+# ILSTU Views Website
 
-The Civil Debate Wall website allows the public to view and participate in debates that are happening through the website and physical installation at the Bob Graham Center at the University of Gainesville Florida. This project is concerned with three main components of the overall project:
+The ILSTU Views website allows the public to view and participate in debates that are happening through the website and physical installation of kiosks soon to be placed all throughout Illinois State University. This project is concerned with three main components of the overall project:
 
 1. The data API (used by the website and kiosk)
 2. The public facing website
@@ -9,13 +9,12 @@ The Civil Debate Wall website allows the public to view and participate in debat
 The application is built primarily using the following frameworks, technologies, and APIs:
 
 1. [Flask](http://flask.pocoo.org/)
-2. [MongoDB](http://www.mongodb.org/) (hosted at [MongoHQ](http://www.mongohq.com))
-3. Amazon Web Services
-4. Twilio
+2. [MongoDB](http://www.mongodb.org/)
+3. Twilio
 
 ## LICENSE
 
-The Civil Debate Wall codebase is licensed under the Affero GNU Public License version 3. Please see the files in the [/LEGAL folder](https://github.com/localprojects/Civil-Debate-Wall/tree/master/LEGAL) for details.
+The ILSTU Views codebase is licensed under the Affero GNU Public License version 3. Please see the files in the [/LEGAL folder](https://github.com/Chiggins/ILSTUViews/tree/master/LEGAL) for details.
 
 ## Development
 
@@ -33,9 +32,9 @@ Another great resource for setting up a proper Python environment can be found o
 
 Now to get the project and its dependencies (if you haven't already). Perform the following from the command line:
 
-    $ git clone git@git.assembla.com:lp-cdw.4.git civildebatewall
-    $ cd civildebatewall
-    $ mkvirtualenv cdw
+    $ git clone git@github.com:Chiggins/ILSTUViews.git ilstuviews/
+    $ cd ilstuviews/
+    $ mkvirtualenv ilstuviews
     $ pip install -r requirements.txt
 
 Once you've done this you'll want to setup your development rcfile. Copy the sample rcfile by performing the following:
@@ -68,7 +67,7 @@ will startup the local development server.
 
 If you need to work on the Facebook login/registration component, you'll need to create a dummy application under a Facebook account you have access to. Add the app ID and app secret values to your rcfile or configuration file. It's also quite useful to setup a host rule on your system for the domain associated with your dummy app. For instance, my dummy app's domain is dev.www.civildebatewall.com and I have a hosts file entry that looks like so:
 
-    $ 127.0.0.1    dev.www.civildebatewall.com
+    $ 127.0.0.1    dev.ilstuviews.illinoisstate.edu
 
 This way there shouldn't be any errors when trying to authenticate against Facebook. If you end up doing this you'll need to ensure you configure the `app_local_request` value in `rcfile.development` and regenerate it or manually edit the `LOCAL_REQUEST` config value in `instances/config.py`.
 
