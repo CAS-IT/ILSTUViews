@@ -515,7 +515,7 @@ def init(app):
             redirect_url = urllib.quote_plus('%s/share/close' % lr)
             fb_url = fb_url % (app_id, 
                                urllib.quote_plus(url),
-                               urllib.quote_plus('The Wall'),
+                               urllib.quote_plus('ILSTU Views'),
                                urllib.quote_plus('A place for civil debate'), 
                                urllib.quote_plus(msg), 
                                redirect_url)
