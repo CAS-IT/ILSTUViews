@@ -27,12 +27,12 @@ cssmin==0.1.4
 factory_boy==1.0.0
 httplib2==0.7.4
 lorem-ipsum-generator==0.3
-mongoengine==0.7.7
+mongoengine
 nose==1.1.2
 oauth2==1.5.211
 paramiko==1.9.0
 pycrypto==2.6
-pymongo==2.4
+pymongo
 twilio==3.3.2
 webassets==0.8
 wsgiref==0.1.2
