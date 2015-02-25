@@ -54,3 +54,5 @@ tests/selenium
 *.tgz
 *.zip
 
+# We don't need the fab generated file
+instance/config.py
