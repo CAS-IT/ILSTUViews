@@ -58,7 +58,10 @@ def stats():
     total_threads_web = cdw.threads.with_fields(origin='web').count()
     
     total_messages = cdw.posts.all().count()
-    average_responses = float(total_messages) / float(total_threads) 
+    try:
+        average_responses = float(total_messages) / float(total_threads) 
+    except ZeroDivisionError:
+        average_responses = 0
     
     total_messages_kiosk = cdw.posts.with_fields(origin='kiosk').count()
     total_messages_web = cdw.posts.with_fields(origin='web').count()
