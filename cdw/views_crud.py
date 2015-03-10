@@ -2,6 +2,7 @@
     :copyright: (c) 2011 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LEGAL/LICENSE for more details.
 """
+from cdw import admin_required
 from cdw.forms import QuestionForm, ThreadCrudForm, PostCrudForm
 from cdw.models import Question, Post
 from cdw.services import cdw, connection_service
@@ -12,6 +13,7 @@ blueprint = Blueprint('admin/crud', __name__)
 
 # Questions
 @blueprint.route("/questions", methods=['POST'])
+@admin_required
 def question_create():
     form = QuestionForm(csrf_enabled=False)
     form.category.choices = [(str(c.id), c.name) for c in cdw.categories.all()]
@@ -23,6 +25,7 @@ def question_create():
     return redirect('/admin/debates/questions')
 
 @blueprint.route("/questions/<question_id>", methods=['PUT'])
+@admin_required
 def question_update(question_id):
     question = cdw.questions.with_id(question_id)
     form = QuestionForm(csrf_enabled=False)
@@ -36,6 +39,7 @@ def question_update(question_id):
     return redirect('/admin/debates/questions/%s' % str(question.id))
 
 @blueprint.route("/questions/<question_id>", methods=['DELETE'])
+@admin_required
 def question_delete(question_id):
     question = cdw.questions.with_id(question_id)
     threads = cdw.threads.with_fields(question=question)
@@ -49,6 +53,7 @@ def question_delete(question_id):
     return redirect("/admin/debates/questions")
 
 @blueprint.route("/questions/<question_id>/unarchive", methods=['GET','POST'])
+@admin_required
 def question_unarchive(question_id):
     question = cdw.questions.with_id(question_id)
     question.archived = False
@@ -59,6 +64,7 @@ def question_unarchive(question_id):
 
 # Threads
 @blueprint.route("/threads", methods=['POST'])
+@admin_required
 def thread_create():
     thread_form = ThreadCrudForm(csrf_enabled=False)
     current_app.logger.debug(thread_form.question_id.data)
@@ -83,14 +89,17 @@ def thread_create():
     
 
 @blueprint.route("/threads/<thread_id>", methods=['GET'])
+@admin_required
 def thread_show(thread_id):
     pass
 
 @blueprint.route("/threads/<thread_id>", methods=['PUT'])
+@admin_required
 def thread_update(thread_id):
     pass
 
 @blueprint.route("/threads/<thread_id>", methods=['DELETE'])
+@admin_required
 def thread_delete(thread_id):
     thread = cdw.threads.with_id(thread_id)
     """
@@ -130,6 +139,7 @@ def user_update(user_id):
 """
 
 @blueprint.route("/users/<user_id>", methods=['DELETE'])
+@admin_required
 def user_delete(user_id):
     user = cdw.users.with_id(user_id)
     current_app.logger.debug('Deleting user: %s' % user)
@@ -158,6 +168,7 @@ def user_delete(user_id):
 
 # Posts
 @blueprint.route("/posts", methods=['POST'])
+@admin_required
 def post_create():
     post_form = PostCrudForm(csrf_enabled=False)
     
@@ -182,6 +193,7 @@ def post_update(post_id):
 """
 
 @blueprint.route("/posts/<post_id>", methods=['DELETE'])
+@admin_required
 def post_delete(post_id):
     post = cdw.posts.with_id(post_id)
     current_app.logger.debug('Deleting post: %s' % post)
@@ -199,6 +211,7 @@ def post_delete(post_id):
     return redirect(request.referrer)
 
 @blueprint.route("/posts/<post_id>/like", methods=['GET','POST'])
+@admin_required
 def post_like(post_id):
     post = cdw.posts.with_id(post_id)
     post.likes += 1
@@ -206,6 +219,7 @@ def post_like(post_id):
     return redirect(request.referrer)
 
 @blueprint.route("/posts/<post_id>/unflag", methods=['POST'])
+@admin_required
 def post_reset_flags(post_id):
     post = cdw.posts.with_id(post_id)
     post.flags = 0
@@ -214,6 +228,7 @@ def post_reset_flags(post_id):
     return redirect(request.referrer)
 
 @blueprint.route("/suggestions/<question_id>", methods=['DELETE'])
+@admin_required
 def suggestion_delete(question_id):
     question = cdw.suggestions.with_id(question_id)
     question.delete()
@@ -221,6 +236,7 @@ def suggestion_delete(question_id):
     return redirect("/admin/debates/suggestions")
 
 @blueprint.route("/suggestions/<question_id>/approve", methods=['POST'])
+@admin_required
 def suggestion_approve(question_id):
     question = cdw.suggestions.with_id(question_id)
     new_question = Question(
